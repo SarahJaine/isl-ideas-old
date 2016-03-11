@@ -44,6 +44,10 @@ INSTALLED_APPS = (
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
 
+INSTALLED_APPS+=(
+    'islideas',
+    'islideas.ideas',
+   )
 
 
 MIDDLEWARE_CLASSES = (
