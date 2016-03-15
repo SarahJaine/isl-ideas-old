@@ -1,13 +1,16 @@
-{% load staticfiles %}
-<!DOCTYPE html>
-<html>
+{% extends 'ideas/base.html' %}
+{% block title %}Home{{ block.super }}
+{% endblock title %}
+{% block content %}
+  <h1>Hello Index</h1>
 
-<head>
-  <title>ISL Ideas</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-</head>
-
-<body>
-  <h1>Hello ISL Ideas</h1>
-</body>
-</html>
+  {% for idea in ideas %}
+  <h2>
+    <a href="{% url 'idea_detail' slug=idea.slug %}">
+      {{ idea.title }}
+    </a>
+  </h2>
+  <p>{{ idea.description }}</p>
+  <p>Posted at: {{ idea.date }}</p>
+  {% endfor %}
+{% endblock content %}

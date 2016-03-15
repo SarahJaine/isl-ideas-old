@@ -1,0 +1,22 @@
+{% extends 'ideas/base.html' %}
+{% block title %}
+  {{ idea.title }}{{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<h2>{{ idea.title }}</h2>
+  <p>{{ idea.description }}</p>
+  <p>Posted at {{ idea.date }}</p>
+
+<h2>Votes</h2>
+{% for vote in related_votes %}
+  <p>{{ vote.vote_1 }}</p>
+{% endfor %}
+
+<h2>Comments</h2>
+{% for comment in related_comments %}
+  <p>{{ comment.description }}</p>
+  <p>Posted at {{comment.date }}</p>
+{% endfor %}
+
+{% endblock content %}
