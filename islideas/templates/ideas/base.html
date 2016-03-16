@@ -8,11 +8,12 @@
        - ISL Ideas
     {% endblock title %}
   </title>
-<link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
   {% block header %}{% endblock header %}
 </head>
 
 <body>
+  <p><a href="{% url 'home' %}">Home</a></p>
   {% block content %}{% endblock content %}
   {% block footer %}{% endblock footer %}
 </body>
