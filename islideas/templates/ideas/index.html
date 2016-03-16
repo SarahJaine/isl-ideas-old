@@ -3,7 +3,6 @@
 {% endblock title %}
 {% block content %}
   <h1>ISL Ideas</h1>
-
   {% for idea in ideas %}
   <h2>
     <a href="{% url 'idea_detail' slug=idea.slug %}">

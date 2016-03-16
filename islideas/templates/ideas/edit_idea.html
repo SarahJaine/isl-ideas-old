@@ -1,0 +1,13 @@
+{% extends 'ideas/base.html' %}
+{% block title %}
+Edit {{ idea.title }}{{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<h1>Edit "{{ idea.title }}"</h1>
+  <form role="form" action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

@@ -1,5 +1,7 @@
 from django.db import models
+from datetime import datetime
 # from django.db.models import Sum
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -28,8 +30,8 @@ class Idea(models.Model):
         return self.title
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
-    date = models.DateTimeField()
-    votes = models.IntegerField()
+    date = models.DateTimeField(default=datetime.now, blank=True)
+    votes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
 
 
@@ -37,14 +39,14 @@ class Vote(models.Model):
     # user = models.ForeignKey(User)
     idea = models.ForeignKey(Idea)
     vote_1 = models.BooleanField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
 
 class Comment(models.Model):
     # user = models.ForeignKey(User)
     idea = models.ForeignKey(Idea)
     description = models.TextField()
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=datetime.now, blank=True)
 
 
 # class User(models.Model):
