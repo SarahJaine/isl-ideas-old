@@ -7,14 +7,8 @@ from islideas.ideas.models import Idea, Tag, Comment, Vote
 
 class IdeaList(ListView):
     model = Idea
+    queryset = Idea.objects.order_by('-date')
     context_object_name = 'posted_ideas'
-
-
-# def index(request):
-#     ideas = Idea.objects.all().order_by('-date')
-#     return render(request, 'ideas/index.html', {
-#         'ideas': ideas,
-#     })
 
 
 def idea_detail(request, slug):
