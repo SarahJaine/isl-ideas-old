@@ -6,17 +6,20 @@
 {% block content %}
 <h1>{{ idea.title }}</h1>
   <p>{{ idea.description }}</p>
-
-<!-- Figure out how to correct this formatting -->
-  <p>Tags: {{ related_tags }}</p>
-
+  <p>Tags:
+    {% for tag in related_tags %}
+      {{ tag }}
+    {% endfor %}
+  </p>
   <p>Posted at {{ idea.date }}</p>
-<!-- Why does this break the page? <a href="{% url 'edit_idea' ...-->
+  <a href="{% url 'edit_idea' slug=idea.slug %}">Edit Idea</a>
 
 <h2>Votes</h2>
-  {% for vote in related_votes %}
-    <p>{{ vote.vote_1 }}</p>
-  {% endfor %}
+  <p>Each Vote:
+    {% for vote in related_votes %}
+      {{ vote.vote_1 }}
+    {% endfor %}
+  </p>
   <p>Total votes: {{ related_votes_total }}</p>
 
 <h2>Comments</h2>
@@ -31,5 +34,4 @@
     {{ form.as_p }}
     <button type="submit">Submit</button>
   </form>
-
 {% endblock content %}

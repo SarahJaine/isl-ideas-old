@@ -1,17 +1,20 @@
 from django.shortcuts import render, redirect
-from islideas.ideas.forms import IdeaForm, CommentForm
-# from django.http import HttpResponse
-# from django.db.models import Sum
-from django.views.generic import View, ListView, DetailView
-from islideas.ideas.models import Idea, Tag, Comment, Vote
+from django.views.generic import ListView, DetailView
 from django.template.defaultfilters import slugify
+from islideas.ideas.forms import IdeaForm, CommentForm
+from islideas.ideas.models import Idea, Tag, Comment, Vote
 
 
-def index(request):
-    ideas = Idea.objects.all().order_by('-date')
-    return render(request, 'ideas/index.html', {
-        'ideas': ideas,
-    })
+class IdeaList(ListView):
+    model = Idea
+    context_object_name = 'posted_ideas'
+
+
+# def index(request):
+#     ideas = Idea.objects.all().order_by('-date')
+#     return render(request, 'ideas/index.html', {
+#         'ideas': ideas,
+#     })
 
 
 def idea_detail(request, slug):
