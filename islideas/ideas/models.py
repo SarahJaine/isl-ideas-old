@@ -1,38 +1,44 @@
 from django.db import models
 from datetime import datetime
-# from django.db.models import Sum
+
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.template.defaultfilters import slugify
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self):
         return self.name
-    # TAGS = (
-    #     ('WRB',   'wearable'),
-    #     ('BIO',   'biohacking'),
-    #     ('MUS',   'music'),
-    #     ('TRV',   'travel'),
-    #     ('EDU',   'education'),
-    #     ('HOM',   'home automation'),
-    #     ('AST',   'assistive technology'),
-    #     ('OSS',   'open-source'),
-    #     ('SMC',   'social media'),
-    #     # add other tags
-    #     )
 
 
 class Idea(models.Model):
     # user = models.ForeignKey(User)
     title = models.CharField(max_length=255, unique=True)
-
-    def __str__(self):
-        return self.title
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
+    ## Maybe this should be date = models.DateTimeField(auto_now=True)?
     date = models.DateTimeField(default=datetime.now, blank=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
+
+    class Meta:
+        ordering = ["title"]
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return "/idea/%s/edit" % self.slug
+
+
+@receiver(pre_save)
+def slug_catch(sender, instance, *args, **kwargs):
+    instance.slug = slugify(instance.title)
 
 
 class Vote(models.Model):
@@ -40,6 +46,8 @@ class Vote(models.Model):
     idea = models.ForeignKey(Idea)
     vote_1 = models.BooleanField()
     date = models.DateTimeField(default=datetime.now, blank=True)
+# add __str to all
+# add subclass Meta for default ordering etc for all
 
 
 class Comment(models.Model):
@@ -48,6 +56,11 @@ class Comment(models.Model):
     description = models.TextField()
     date = models.DateTimeField(default=datetime.now, blank=True)
 
+    class Meta:
+        ordering = ["date"]
+
+    # def __str__(self):
+    #     return self.description
 
 # class User(models.Model):
     # profile information from API

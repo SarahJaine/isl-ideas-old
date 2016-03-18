@@ -1,17 +1,17 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
-from .views import IdeaList
+from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate
 
 urlpatterns = [
 
-    url(r'^$', IdeaList.as_view(), name='home'),
-
-    url(r'^idea/(?P<slug>[-\w]+)/$', views.idea_detail,
+    url(r'^$', IdeaList.as_view(),
+        name='home'),
+    url(r'^idea/(?P<slug>[-\w]+)$', IdeaDetail.as_view(),
         name='idea_detail'),
-    url(r'^idea/(?P<slug>[-\w]+)/edit/$', views.edit_idea,
-        name='edit_idea'),
-    url(r'^new/$', views.new_idea, name='new_idea'),
-
+    url(r'^new/$', IdeaCreate.as_view(),
+        name='idea_form'),
+    url(r'^idea/(?P<slug>[-\w]+)/edit/$', IdeaUpdate.as_view(),
+        name='idea_edit'),
     url(r'^admin/', include(admin.site.urls)),
 ]

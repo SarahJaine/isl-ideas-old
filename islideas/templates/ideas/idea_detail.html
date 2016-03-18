@@ -12,8 +12,10 @@
     {% endfor %}
   </p>
   <p>Posted at {{ idea.date }}</p>
-  <a href="{% url 'edit_idea' slug=idea.slug %}">Edit Idea</a>
 
+
+  {% url 'idea_edit' slug=idea.slug as the_url %}
+    <a href="{{ the_url }}">I'm linking to {{ the_url }}</a>
 <h2>Votes</h2>
   <p>Each Vote:
     {% for vote in related_votes %}
@@ -23,7 +25,12 @@
   <p>Total votes: {{ related_votes_total }}</p>
 
 <h2>Comments</h2>
-  {% for comment in related_comments %}
+  {% for comment in view.comments %}
+    <p>{{ comment.description }}</p>
+    <p>Posted at {{comment.date }}</p>
+  {% endfor %}
+<h2>Comments</h2>
+  {% for comment in posted_comments %}
     <p>{{ comment.description }}</p>
     <p>Posted at {{comment.date }}</p>
   {% endfor %}
