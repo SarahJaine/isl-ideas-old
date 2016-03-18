@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-
+from django.db.models import Count
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from django.template.defaultfilters import slugify
@@ -32,11 +32,8 @@ class Idea(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return "/idea/%s/edit" % self.slug
 
-
-@receiver(pre_save)
+@receiver(pre_save, sender=Idea)
 def slug_catch(sender, instance, *args, **kwargs):
     instance.slug = slugify(instance.title)
 
@@ -46,8 +43,16 @@ class Vote(models.Model):
     idea = models.ForeignKey(Idea)
     vote_1 = models.BooleanField()
     date = models.DateTimeField(default=datetime.now, blank=True)
+
+## Vot tallying not working yet
+# @receiver(pre_save, sender=Vote)
+# def vote_total(sender, instance, *args, **kwargs):
+#     instance.vote = Count(instance.vote_1)
+
 # add __str to all
 # add subclass Meta for default ordering etc for all
+
+
 
 
 class Comment(models.Model):

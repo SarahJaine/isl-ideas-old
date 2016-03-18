@@ -32,7 +32,8 @@ class CommentCreate(CreateView):
 
 class IdeaDetail(DetailView):
     model = Idea
-    context_object_name = 'idea_list'
+
+
 
     ## This is the original way I was creating all my objects
     # idea = Idea.objects.get(idea=idea)

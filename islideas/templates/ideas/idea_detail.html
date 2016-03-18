@@ -6,26 +6,21 @@
 {% block content %}
 <h1>{{ idea.title }}</h1>
   <p>{{ idea.description }}</p>
-  <p>Tags:
-    {% for tag in related_tags %}
-      {{ tag }}
-    {% endfor %}
-  </p>
+  <!-- tags won't display -->
+  <p>Tags: {{idea.tags}}</p>
   <p>Posted at {{ idea.date }}</p>
+  <a href="{% url 'idea_edit' slug=idea.slug %}">Edit Idea</a>
 
-
-  {% url 'idea_edit' slug=idea.slug as the_url %}
-    <a href="{{ the_url }}">I'm linking to {{ the_url }}</a>
 <h2>Votes</h2>
   <p>Each Vote:
     {% for vote in related_votes %}
       {{ vote.vote_1 }}
     {% endfor %}
   </p>
-  <p>Total votes: {{ related_votes_total }}</p>
+  <p>Total votes: {{ idea.votes }}</p>
 
 <h2>Comments</h2>
-  {% for comment in view.comments %}
+  {% for comment in comments %}
     <p>{{ comment.description }}</p>
     <p>Posted at {{comment.date }}</p>
   {% endfor %}
