@@ -7,17 +7,17 @@
 <h1>{{ idea.title }}</h1>
   <p>{{ idea.description }}</p>
   <!-- tags won't display -->
-  <p>Tags: {{idea.tags}}</p>
+  <p>Tags: {% for tag in idea.tags.all %}
+      {{tag.name}}
+    {% endfor %}</p>
   <p>Posted at {{ idea.date }}</p>
-  <p>{{ idea.slug }}</p>
   <a href="{% url 'idea_edit' idea.slug %}">Edit Idea</a>
 
 <h2>Votes</h2>
   <p>Each Vote:
     {% for vote in idea.vote_set.all %}
       {{ vote.vote_1 }}
-    {% endfor %}
-  </p>
+    {% endfor %}</p>
   <p>Total votes: {{ idea.votes }}</p>
 
 <h2>Comments</h2>
