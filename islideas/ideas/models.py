@@ -53,8 +53,6 @@ class Vote(models.Model):
 # add subclass Meta for default ordering etc for all
 
 
-
-
 class Comment(models.Model):
     # user = models.ForeignKey(User)
     idea = models.ForeignKey(Idea)

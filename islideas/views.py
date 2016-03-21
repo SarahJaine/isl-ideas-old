@@ -4,12 +4,12 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.template.defaultfilters import slugify
 from islideas.ideas.forms import IdeaForm, CommentForm
 from islideas.ideas.models import Idea, Tag, Comment, Vote
-
+from django.db.models import F
+from django.shortcuts import get_object_or_404
 
 class IdeaList(ListView):
     model = Idea
     queryset = Idea.objects.order_by('-date')
-    context_object_name = 'idea_list'
 
 
 class IdeaCreate(CreateView):
@@ -32,6 +32,11 @@ class CommentCreate(CreateView):
 
 class IdeaDetail(DetailView):
     model = Idea
+
+
+
+
+
 
 
 

@@ -9,25 +9,23 @@
   <!-- tags won't display -->
   <p>Tags: {{idea.tags}}</p>
   <p>Posted at {{ idea.date }}</p>
-  <a href="{% url 'idea_edit' slug=idea.slug %}">Edit Idea</a>
+  <p>{{ idea.slug }}</p>
+  <a href="{% url 'idea_edit' idea.slug %}">Edit Idea</a>
 
 <h2>Votes</h2>
   <p>Each Vote:
-    {% for vote in related_votes %}
+    {% for vote in idea.vote_set.all %}
       {{ vote.vote_1 }}
     {% endfor %}
   </p>
   <p>Total votes: {{ idea.votes }}</p>
 
 <h2>Comments</h2>
-  {% for comment in comments %}
+  {% for comment in idea.comment_set.all %}
     <p>{{ comment.description }}</p>
     <p>Posted at {{comment.date }}</p>
-  {% endfor %}
-<h2>Comments</h2>
-  {% for comment in posted_comments %}
-    <p>{{ comment.description }}</p>
-    <p>Posted at {{comment.date }}</p>
+    <p>{{ comment.idea }}</p>
+    <p>_____________</p>
   {% endfor %}
 
 <h2>New Comment</h2>
