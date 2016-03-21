@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import ListView, DetailView, View
+from django.views.generic.edit import CreateView, UpdateView, FormMixin, ProcessFormView
 
 from islideas.ideas.forms import IdeaForm, CommentForm
 from islideas.ideas.models import Idea, Tag, Comment, Vote
-
+from django.views.generic import FormView
+from django.views.generic.detail import SingleObjectMixin
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 class IdeaList(ListView):
     model = Idea
@@ -31,26 +34,62 @@ class CommentCreate(CreateView):
     success_url = '/idea/{slug}'
 
 
-class IdeaDetail(DetailView):
+class IdeaDetail(DetailView, FormMixin):
     model = Idea
+    template_name = 'ideas/idea_detail.html'
+
+    form_class = CommentForm
+    success_url = '/idea/{slug}'
+    ## Adding comment still doesn't work...
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/')
+            # return redirect('idea_detail', slug=self.slug)
+
+        return render(request, self.template_name, {'form': form})
 
 
-    ## This is the original way I was creating all my objects
-    # idea = Idea.objects.get(idea=idea)
-    # related_tags = Tag.objects.filter(idea=idea)
-    # related_comments = Comment.objects.filter(idea=idea)
-    # related_votes = Vote.objects.filter(idea=idea)
-    # related_votes_total = related_votes.count()
+#### Really complicated answer from https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#an-alternative-better-solution
+# class CommentCreate(SingleObjectMixin, FormView):
 
-    ## Both return all comments, not just comment on idea
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get a context
-    #     context = super(IdeaDetail, self).get_context_data(**kwargs)
-    #     context['posted_comments'] = Comment.objects.all()
-    #     return context
+#     template_name = 'ideas/idea_detail.html'
+#     form_class = CommentForm
+#     model = Comment
+#     # success_url = '/idea/{slug}'
 
-    # def comments(self):
-    #     return Comment.objects.all
+#     def post(self, request, *args, **kwargs):
+#         if not request.user.is_authenticated():
+#             return HttpResponseForbidden()
+#         self.object = self.get_object()
+#         return super(CommentCreate, self).post(request, *args, **kwargs)
+
+#     def get_success_url(self):
+#         return reverse('idea-detail', kwargs={'pk': self.object.pk})
+
+
+# class IdeaDetail(DetailView):
+#     model = Idea
+#     template_name = 'ideas/idea_detail.html'
+
+#     # form_class = CommentForm
+#     # success_url = '/'
+#     def get_context_data(self, **kwargs):
+#         context = super(IdeaDetail, self).get_context_data(**kwargs)
+#         context['form'] = CommentCreate()
+#         return context
+
+
+# class IdeaDisplay(View):
+
+#     def get(self, request, *args, **kwargs):
+#         view = IdeaDetail.as_view()
+#         return view(request, *args, **kwargs)
+
+#     def post(self, request, *args, **kwargs):
+#         view = CommentCreate.as_view()
+#         return view(request, *args, **kwargs)
 
 ##############################
 ## Original def edit_idea ##

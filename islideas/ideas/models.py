@@ -1,7 +1,6 @@
 from django.db import models
 from datetime import datetime
-from django.db.models import Count
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 
@@ -44,13 +43,11 @@ class Vote(models.Model):
     vote_1 = models.BooleanField()
     date = models.DateTimeField(default=datetime.now, blank=True)
 
-## Vot tallying not working yet
-# @receiver(pre_save, sender=Vote)
-# def vote_total(sender, instance, *args, **kwargs):
-#     instance.vote = Count(instance.vote_1)
 
-# add __str to all
-# add subclass Meta for default ordering etc for all
+@receiver(post_save, sender=Vote)
+def vote_total(sender, instance, *args, **kwargs):
+    instance.idea.votes = instance.idea.vote_set.filter(vote_1=True).count()
+    instance.idea.save()
 
 
 class Comment(models.Model):
