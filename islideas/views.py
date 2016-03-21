@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
-from django.template.defaultfilters import slugify
+
 from islideas.ideas.forms import IdeaForm, CommentForm
 from islideas.ideas.models import Idea, Tag, Comment, Vote
-from django.db.models import F
-from django.shortcuts import get_object_or_404
+
 
 class IdeaList(ListView):
     model = Idea
@@ -22,22 +21,18 @@ class IdeaUpdate(UpdateView):
     model = Idea
     form_class = IdeaForm
     template_name_suffix = '_update_form'
+    success_url = '/idea/{slug}'
 
 
 class CommentCreate(CreateView):
     model = Comment
     form_class = CommentForm
+    template_name = 'ideas/idea_detail.html'
     success_url = '/idea/{slug}'
 
 
 class IdeaDetail(DetailView):
     model = Idea
-
-
-
-
-
-
 
 
     ## This is the original way I was creating all my objects

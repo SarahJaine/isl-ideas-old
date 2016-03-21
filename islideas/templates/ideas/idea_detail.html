@@ -24,7 +24,6 @@
   {% for comment in idea.comment_set.all %}
     <p>{{ comment.description }}</p>
     <p>Posted at {{comment.date }}</p>
-    <p>{{ comment.idea }}</p>
     <p>_____________</p>
   {% endfor %}
 
