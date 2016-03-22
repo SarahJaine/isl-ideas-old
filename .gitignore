@@ -24,3 +24,4 @@ npm-debug.log
 newrelic.ini
 
 islideas/static/
+credentials.py

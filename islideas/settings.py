@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 import os
-
 import dj_database_url
 from decouple import config
 
@@ -34,8 +33,10 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='',
 
 INSTALLED_APPS = (
     'django.contrib.admin',
+    # default auth framework and models
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    # default content type system, allows permissions to be assoc with models
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -44,22 +45,35 @@ INSTALLED_APPS = (
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
 
+
 INSTALLED_APPS += (
     'islideas',
     'islideas.ideas',
+    # added for googleauth
+    # 'googleauth',
    )
 
 
 MIDDLEWARE_CLASSES = (
     'sslify.middleware.SSLifyMiddleware',
+    # Default manages sessions across requests
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    # Default assoc users with requests using sessions
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    # Default logs users out of their other sessions after password change
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+## added for googleauth
+## look at django auth and go ahead and set that u... follow turotial,..assumes django normal auth- specify login url setting, behavior around what happens with someone logs out... etc
+## add django auth backend to this so my django admin panel still works
+# AUTHENTICATION_BACKENDS = (
+#     'googleauth.backends.GoogleAuthBackend',
+# )
 
 ROOT_URLCONF = 'islideas.urls'
 
@@ -116,5 +130,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'public', 'media')
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SSLIFY_DISABLE = config('SSLIFY_DISABLE', default=False, cast=bool)
-
-

@@ -41,14 +41,32 @@ class IdeaDetail(DetailView, FormMixin):
     form_class = CommentForm
     success_url = '/idea/{slug}'
     ## Adding comment still doesn't work...
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/')
-            # return redirect('idea_detail', slug=self.slug)
 
-        return render(request, self.template_name, {'form': form})
+    # def add_comment(self, request, *args, **kwargs):
+    #     form = self.form_class(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         # return HttpResponseRedirect('/')
+    #         return redirect('idea_detail', slug=self.slug)
+
+    #     return render(request, self.template_name, {'form': form})
+
+    ## Very Similar to old way of doing this under functions
+    def add_comment(request):
+        template_name = 'ideas/idea_detail.html'
+        if request.method == 'POST':
+            # bind data to form
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                form.save()
+                # return redirect('idea_detail')
+                return HttpResponseRedirect('/')
+                 # return render(request, 'name.html', {'form': form})
+        # GET or any other request creates a blank form
+        else:
+            form = CommentForm()
+
+        return render(request, template_name, {'form': form})
 
 
 #### Really complicated answer from https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#an-alternative-better-solution

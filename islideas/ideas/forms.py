@@ -1,4 +1,4 @@
-from django.forms import ModelForm
+from django.forms import ModelForm, HiddenInput
 from islideas.ideas.models import Idea, Comment, Vote
 
 
@@ -12,6 +12,7 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ('description',)
+        # widgets = {'idea': HiddenInput()}
 
 
 class VoteForm(ModelForm):

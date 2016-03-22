@@ -30,7 +30,10 @@
 <h2>New Comment</h2>
   <form role="form" action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <!-- <input type="hidden" name="idea_id" value="{{ idea.id }}" /> -->
+    {{ form.description }}
     <button type="submit">Submit</button>
   </form>
+
+
 {% endblock content %}
