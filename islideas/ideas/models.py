@@ -3,6 +3,8 @@ from datetime import datetime
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.template.defaultfilters import slugify
+from django.core.urlresolvers import reverse
+
 
 
 class Tag(models.Model):
@@ -20,7 +22,7 @@ class Idea(models.Model):
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
-    ## Maybe this should be date = models.DateTimeField(auto_now=True)?
+    # Maybe this should be date = models.DateTimeField(auto_now=True)?
     date = models.DateTimeField(default=datetime.now, blank=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
@@ -52,7 +54,7 @@ def vote_total(sender, instance, *args, **kwargs):
 
 class Comment(models.Model):
     # user = models.ForeignKey(User)
-    idea = models.ForeignKey(Idea)
+    idea = models.ForeignKey(Idea, blank=True, null=True)
     description = models.TextField()
     date = models.DateTimeField(default=datetime.now, blank=True)
 

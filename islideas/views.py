@@ -7,7 +7,10 @@ from islideas.ideas.models import Idea, Tag, Comment, Vote
 from django.views.generic import FormView
 from django.views.generic.detail import SingleObjectMixin
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
+from django import forms
+from django.utils.text import slugify
+
 
 class IdeaList(ListView):
     model = Idea
@@ -33,84 +36,68 @@ class CommentCreate(CreateView):
     template_name = 'ideas/idea_detail.html'
     success_url = '/idea/{slug}'
 
+##############################
+### Detail View 2.0- shows detail, commentform-
+#### Problems: comment saves orphaned from idea
+#### from https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#an-alternative-better-solution
 
-class IdeaDetail(DetailView, FormMixin):
-    model = Idea
-    template_name = 'ideas/idea_detail.html'
+# # Get View
+# class IdeaDisplay(DetailView):
+#     model = Idea
 
-    form_class = CommentForm
-    success_url = '/idea/{slug}'
-    ## Adding comment still doesn't work...
+#     def get_context_data(self, **kwargs):
+#         context = super(IdeaDisplay, self).get_context_data(**kwargs)
+#         context['form'] = CommentForm()
+#         return context
 
-    # def add_comment(self, request, *args, **kwargs):
-    #     form = self.form_class(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         # return HttpResponseRedirect('/')
-    #         return redirect('idea_detail', slug=self.slug)
-
-    #     return render(request, self.template_name, {'form': form})
-
-    ## Very Similar to old way of doing this under functions
-    def add_comment(request):
-        template_name = 'ideas/idea_detail.html'
-        if request.method == 'POST':
-            # bind data to form
-            form = CommentForm(request.POST)
-            if form.is_valid():
-                form.save()
-                # return redirect('idea_detail')
-                return HttpResponseRedirect('/')
-                 # return render(request, 'name.html', {'form': form})
-        # GET or any other request creates a blank form
-        else:
-            form = CommentForm()
-
-        return render(request, template_name, {'form': form})
-
-
-#### Really complicated answer from https://docs.djangoproject.com/en/1.9/topics/class-based-views/mixins/#an-alternative-better-solution
-# class CommentCreate(SingleObjectMixin, FormView):
-
+# # Post view
+# class CommentInterest(SingleObjectMixin, FormView):
 #     template_name = 'ideas/idea_detail.html'
 #     form_class = CommentForm
-#     model = Comment
-#     # success_url = '/idea/{slug}'
+#     model = Idea
 
 #     def post(self, request, *args, **kwargs):
 #         if not request.user.is_authenticated():
 #             return HttpResponseForbidden()
 #         self.object = self.get_object()
-#         return super(CommentCreate, self).post(request, *args, **kwargs)
+#         form = CommentForm(request.POST)
+#         form.save()
+#         ### what it was supposed to be
+#         # return super(CommentInterest, self).post(request, *args, **kwargs)
+#         ### what I did for error checking
+#         return HttpResponse("at post")
+
 
 #     def get_success_url(self):
-#         return reverse('idea-detail', kwargs={'pk': self.object.pk})
+#         ### what it was supposed to be
+#         # return reverse('author-detail', kwargs={'pk': self.object.pk})
+#         ### what I did for error checking
+#         return HttpResponse("at success")
 
-
-# class IdeaDetail(DetailView):
-#     model = Idea
-#     template_name = 'ideas/idea_detail.html'
-
-#     # form_class = CommentForm
-#     # success_url = '/'
-#     def get_context_data(self, **kwargs):
-#         context = super(IdeaDetail, self).get_context_data(**kwargs)
-#         context['form'] = CommentCreate()
-#         return context
-
-
-# class IdeaDisplay(View):
+# # Traffic sort
+# class IdeaDetail(View):
 
 #     def get(self, request, *args, **kwargs):
-#         view = IdeaDetail.as_view()
+#         view = IdeaDisplay.as_view()
 #         return view(request, *args, **kwargs)
 
 #     def post(self, request, *args, **kwargs):
-#         view = CommentCreate.as_view()
+#         view = CommentInterest.as_view()
 #         return view(request, *args, **kwargs)
 
+# ##############################
+# ### Detail View 1.0- shows detail, commentform-
+# #### Problems: submit loads blank pg, console error "405 (Method not allowed)"
+
+class IdeaDetail(DetailView, FormMixin):
+    model = Idea
+    template_name = 'ideas/idea_detail.html'
+    form_class = CommentForm
+    success_url = '/idea/{slug}'
+
+
 ##############################
-## Original def edit_idea ##
+## Original def edit_idea ####
 ##############################
 
 # # EditView
@@ -138,7 +125,7 @@ class IdeaDetail(DetailView, FormMixin):
 #     })
 
 ##############################
-## Original def new_idea ##
+## Original def new_idea #####
 ##############################
 
 # # CreateView
@@ -204,3 +191,4 @@ class IdeaDetail(DetailView, FormMixin):
 #         'related_votes': related_votes,
 #         'related_votes_total': related_votes_total,
 #     })
+

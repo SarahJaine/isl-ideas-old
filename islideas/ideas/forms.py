@@ -12,8 +12,6 @@ class CommentForm(ModelForm):
     class Meta:
         model = Comment
         fields = ('description',)
-        # widgets = {'idea': HiddenInput()}
-
 
 class VoteForm(ModelForm):
     class Meta:

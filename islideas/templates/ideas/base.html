@@ -9,8 +9,6 @@
     {% endblock title %}
   </title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <meta name="google-signin-client_id" .content="144260768305-7fs9u900bdhi4k2i1qlfna49d887njo1.apps.googleusercontent.com144260768305-7fs9u900bdhi4k2i1qlfna49d887njo1.apps.googleusercontent.com">
 
     {% block header %}
     {% endblock header %}
@@ -18,25 +16,7 @@
 
 <body>
   <p><a href="{% url 'home' %}">Home</a></p>
-
-  <!-- Google SignIn -->
-  <div class="g-signin2" data-onsuccess="onSignIn"></div>
-
-  <!-- Google SignOut -->
-  <a href="#" onclick="signOut();">Sign out</a>
-
-  <!-- Google script that doesn't work yet -->
-  <script>
-    function signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(function () {
-        console.log('User signed out.');
-      });
-    }
-  </script>
-  <p>
-    <a href="{% url 'idea_form' %}">Create New Idea</a>
-  </p>
+  <p><a href="{% url 'idea_form' %}">Create New Idea</a></p>
   {% block content %}{% endblock content %}
   {% block footer %}{% endblock footer %}
 </body>
