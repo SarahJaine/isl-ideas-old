@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 from . import views
-from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate, CommentCreate
+from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate
 # from googleauth import login, callback, logout
 
 urlpatterns = [

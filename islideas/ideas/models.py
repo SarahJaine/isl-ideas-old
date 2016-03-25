@@ -23,7 +23,7 @@ class Idea(models.Model):
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
     # Maybe this should be date = models.DateTimeField(auto_now=True)?
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
 
@@ -32,6 +32,9 @@ class Idea(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('idea_details', kwargs={'slug': self.slug})
 
 
 @receiver(pre_save, sender=Idea)
@@ -43,7 +46,7 @@ class Vote(models.Model):
     # user = models.ForeignKey(User)
     idea = models.ForeignKey(Idea)
     vote_1 = models.BooleanField()
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
 
 
 @receiver(post_save, sender=Vote)
@@ -54,9 +57,9 @@ def vote_total(sender, instance, *args, **kwargs):
 
 class Comment(models.Model):
     # user = models.ForeignKey(User)
-    idea = models.ForeignKey(Idea, blank=True, null=True)
+    idea = models.ForeignKey(Idea)
     description = models.TextField()
-    date = models.DateTimeField(default=datetime.now, blank=True)
+    date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         ordering = ["date"]

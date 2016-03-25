@@ -40,18 +40,12 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'islideas',
+    'islideas.ideas',
 )
 
 if DEBUG:
     INSTALLED_APPS += ('debug_toolbar',)
-
-
-INSTALLED_APPS += (
-    'islideas',
-    'islideas.ideas',
-    # added for googleauth
-    # 'googleauth',
-   )
 
 
 MIDDLEWARE_CLASSES = (

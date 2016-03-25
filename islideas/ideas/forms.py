@@ -13,6 +13,7 @@ class CommentForm(ModelForm):
         model = Comment
         fields = ('description',)
 
+
 class VoteForm(ModelForm):
     class Meta:
         model = Vote
