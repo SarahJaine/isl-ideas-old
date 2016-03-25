@@ -3,6 +3,10 @@
 {% endblock title %}
 {% block content %}
   <h1>ISL Ideas</h1>
+  <form action="{% url "home" %}" method="GET">
+    <input type="text" name="q" />
+    <button type="submit">search</button>
+  </form>
   {% for idea in idea_list %}
   <h2>
     <a href="{% url 'idea_detail' slug=idea.slug %}">
@@ -10,6 +14,9 @@
     </a>
   </h2>
   <p>{{ idea.description }}</p>
+  <p>Tags: {% for tag in idea.tags.all %}
+      {{tag.name}}{{tag.id}}
+    {% endfor %}</p>
   <p>Posted at: {{ idea.date }}</p>
   {% endfor %}
 {% endblock content %}

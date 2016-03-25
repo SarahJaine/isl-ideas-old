@@ -1,4 +1,5 @@
 from django import forms
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
@@ -16,6 +17,16 @@ from islideas.ideas.models import Idea, Tag, Comment, Vote
 class IdeaList(ListView):
     model = Idea
     queryset = Idea.objects.order_by('-date')
+    template_name = 'ideas/idea_list.html'
+    def get_queryset(self):
+        queryset = super(IdeaList, self).get_queryset()
+
+        q = self.request.GET.get('q')
+        if q:
+            # I will need a diff way to search for tagss
+            return queryset.filter(Q(title__icontains=q) | Q(description__icontains=q))
+        return queryset
+
 
 class IdeaActionMixin(object):
 
