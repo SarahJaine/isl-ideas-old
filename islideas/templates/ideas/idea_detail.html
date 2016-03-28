@@ -21,7 +21,7 @@
   <p>Tags: {% for tag in idea.tags.all %}
       {{tag.name}}
     {% endfor %}</p>
-  <p>Posted at {{ idea.date }}, {{idea.id}}</p>
+  <p>Posted at {{ idea.date }}</p>
   <a href="{% url 'idea_edit' idea.slug %}">Edit Idea</a>
 
 <h2>Votes</h2>
@@ -42,9 +42,7 @@
   <form role="form" action="{% url 'idea_detail' idea.slug %}" method="post">
     {% csrf_token %}
     {{ comment_form.description }}
-    {{ comment_form.idea }}
     {{ vote_form.vote_1 }}
-
     <button type="submit">Submit</button>
   </form>
 {% endblock content %}

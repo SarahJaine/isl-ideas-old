@@ -15,8 +15,9 @@
   </h2>
   <p>{{ idea.description }}</p>
   <p>Tags: {% for tag in idea.tags.all %}
-      {{tag.name}}{{tag.id}}
+      {{tag.name}}
     {% endfor %}</p>
   <p>Posted at: {{ idea.date }}</p>
+  <p>Total votes: {{ idea.votes }}</p>
   {% endfor %}
 {% endblock content %}

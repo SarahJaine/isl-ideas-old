@@ -41,7 +41,7 @@ class IdeaCreate(IdeaActionMixin, CreateView):
     model = Idea
     form_class = IdeaForm
     success_url = '/idea/{slug}'
-    success_msg = "Idea created!"
+    success_msg = "Created new Idea!"
 
 
 class IdeaUpdate(IdeaActionMixin, UpdateView):
@@ -49,7 +49,7 @@ class IdeaUpdate(IdeaActionMixin, UpdateView):
     form_class = IdeaForm
     template_name_suffix = '_update_form'
     success_url = '/idea/{slug}'
-    success_msg = "Idea edited!"
+    success_msg = "Idea successfully edited!"
 
 
 class IdeaDetail(DetailView):
