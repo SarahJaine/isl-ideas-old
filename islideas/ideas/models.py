@@ -1,10 +1,8 @@
 from django.db import models
-from datetime import datetime
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
-
 
 
 class Tag(models.Model):
@@ -47,6 +45,9 @@ class Vote(models.Model):
     vote_1 = models.BooleanField()
     date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+            ordering = ["idea", "-date"]
+
 
 @receiver(post_save, sender=Vote)
 def vote_total(sender, instance, *args, **kwargs):
@@ -61,10 +62,8 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ["date"]
+        ordering = ["idea", "-date"]
 
-    # def __str__(self):
-    #     return self.description
 
 # class User(models.Model):
     # profile information from API
