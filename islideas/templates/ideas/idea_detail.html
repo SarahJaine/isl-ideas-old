@@ -18,7 +18,6 @@
 
 <h1>{{ idea.title }}</h1>
   <p>{{ idea.description }}</p>
-  <!-- tags won't display -->
   <p>Tags: {% for tag in idea.tags.all %}
       {{tag.name}}
     {% endfor %}</p>
@@ -40,12 +39,12 @@
   {% endfor %}
 
 <h2>New Comment</h2>
-  <form role="form" action="" method="post">
+  <form role="form" action="{% url 'idea_detail' idea.slug %}" method="post">
     {% csrf_token %}
-    <!-- <input type="hidden" name="idea_id" value="{{ idea.id }}" /> -->
-    {{ form.description }}
+    {{ comment_form.description }}
+    {{ comment_form.idea }}
+    {{ vote_form.vote_1 }}
+
     <button type="submit">Submit</button>
   </form>
-
-
 {% endblock content %}

@@ -1,4 +1,5 @@
-from django.forms import ModelForm, HiddenInput
+from django.forms import ModelForm
+from django.forms.models import inlineformset_factory
 from islideas.ideas.models import Idea, Comment, Vote
 
 

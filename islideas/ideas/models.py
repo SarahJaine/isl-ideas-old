@@ -21,7 +21,7 @@ class Idea(models.Model):
     # user = models.ForeignKey(User)
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
-    tags = models.ManyToManyField(Tag,related_name='tags')
+    tags = models.ManyToManyField(Tag)
     date = models.DateTimeField(auto_now_add=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
