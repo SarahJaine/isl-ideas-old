@@ -11,13 +11,15 @@ class IdeaList(ListView):
     model = Idea
     queryset = Idea.objects.order_by('-date')
     template_name = 'ideas/idea_list.html'
+
     def get_queryset(self):
         queryset = super(IdeaList, self).get_queryset()
 
         q = self.request.GET.get('q')
         if q:
-            # I will need a diff way to search for tagss
-            return queryset.filter(Q(title__icontains=q) | Q(description__icontains=q))
+            return queryset.filter(Q(title__icontains=q) |
+                                   Q(description__icontains=q) |
+                                   Q(tags__name=q))
         return queryset
 
 
