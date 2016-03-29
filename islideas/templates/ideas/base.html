@@ -17,6 +17,15 @@
 <body>
   <p><a href="{% url 'home' %}">Home</a></p>
   <p><a href="{% url 'idea_form' %}">Create New Idea</a></p>
+  {% if user.is_authenticated %}
+    <li>
+      <a href="{% url 'googleauth_logout' %}">Logout</a>
+    </li>
+  {% else %}
+    <li>
+      <a href="{% url 'googleauth_login' %}">Login</a>
+    </li>
+{% endif %}
   {% block content %}{% endblock content %}
   {% block footer %}{% endblock footer %}
 </body>

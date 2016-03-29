@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm
 from islideas.ideas.models import Idea
+from django.views.decorators.http import require_http_methods
 
 
 class IdeaList(ListView):
@@ -23,28 +24,25 @@ class IdeaList(ListView):
         return queryset
 
 
-class IdeaActionMixin(object):
+class ActionMixin(object):
 
-    @property
-    def foo(self):
-        return self._foo
-
+    @require_http_methods(["POST"])
     def success_msg(self):
         return NotImplemented
 
     def form_valid(self, form):
         messages.info(self.request, self.success_msg)
-        return super(IdeaActionMixin, self).form_valid(form)
+        return super(ActionMixin, self).form_valid(form)
 
 
-class IdeaCreate(IdeaActionMixin, CreateView):
+class IdeaCreate(ActionMixin, CreateView):
     model = Idea
     form_class = IdeaForm
     success_url = '/idea/{slug}'
     success_msg = "Created new Idea!"
 
 
-class IdeaUpdate(IdeaActionMixin, UpdateView):
+class IdeaUpdate(ActionMixin, UpdateView):
     model = Idea
     form_class = IdeaForm
     template_name_suffix = '_update_form'
@@ -52,7 +50,7 @@ class IdeaUpdate(IdeaActionMixin, UpdateView):
     success_msg = "Idea successfully edited!"
 
 
-class IdeaDetail(DetailView):
+class IdeaDetail(ActionMixin, DetailView):
     model = Idea
     form_class = IdeaForm
 
@@ -62,9 +60,6 @@ class IdeaDetail(DetailView):
         context['vote_form'] = VoteForm()
         return context
 
-    def get_success_url(self):
-        url = self.get_absolute_url
-
     def post(self, request, *args, **kwargs):
         idea = get_object_or_404(Idea, slug=kwargs['slug'])
 
@@ -73,6 +68,7 @@ class IdeaDetail(DetailView):
             new_comment = comment_form.save(commit=False)
             new_comment.idea = idea
             new_comment.save()
+            # success_msg = "Added comment!"
 
         vote_form = VoteForm(request.POST)
         if vote_form.is_valid():
@@ -81,12 +77,12 @@ class IdeaDetail(DetailView):
             if new_vote.vote_1:
                 new_vote.idea = idea
                 new_vote.save()
+                # success_msg = "Vote tallied!"
+        return redirect('idea_detail', idea.slug,)
 
-        return redirect('idea_detail', idea.slug, )
-
-######
-## Original def edit_idea ####
-##############################
+#
+# Original def edit_idea ####
+#
 
 # # EditView
 # def edit_idea(request, slug):
@@ -113,7 +109,7 @@ class IdeaDetail(DetailView):
 #     })
 
 ##############################
-## Original def new_idea #####
+# Original def new_idea #####
 ##############################
 
 # # CreateView
@@ -141,7 +137,7 @@ class IdeaDetail(DetailView):
 #     })
 
 ##############################
-## Original def idea_detail ##
+# Original def idea_detail ##
 ##############################
 
 # def idea_detail(request, slug):
@@ -179,4 +175,3 @@ class IdeaDetail(DetailView):
 #         'related_votes': related_votes,
 #         'related_votes_total': related_votes_total,
 #     })
-

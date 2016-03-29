@@ -35,13 +35,14 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # default auth framework and models
     'django.contrib.auth',
-    'django.contrib.contenttypes',
     # default content type system, allows permissions to be assoc with models
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'islideas',
     'islideas.ideas',
+    'googleauth',
 )
 
 if DEBUG:
@@ -65,9 +66,11 @@ MIDDLEWARE_CLASSES = (
 ## added for googleauth
 ## look at django auth and go ahead and set that u... follow turotial,..assumes django normal auth- specify login url setting, behavior around what happens with someone logs out... etc
 ## add django auth backend to this so my django admin panel still works
-# AUTHENTICATION_BACKENDS = (
-#     'googleauth.backends.GoogleAuthBackend',
-# )
+AUTHENTICATION_BACKENDS = (
+    'googleauth.backends.GoogleAuthBackend',
+)
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
 
 ROOT_URLCONF = 'islideas.urls'
 

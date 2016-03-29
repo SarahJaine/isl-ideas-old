@@ -3,6 +3,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.template.defaultfilters import slugify
 from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 
 class Tag(models.Model):
@@ -16,7 +17,7 @@ class Tag(models.Model):
 
 
 class Idea(models.Model):
-    # user = models.ForeignKey(User)
+    user = models.ForeignKey(User, blank=True, null=True)
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     tags = models.ManyToManyField(Tag)
@@ -40,7 +41,7 @@ def slug_catch(sender, instance, *args, **kwargs):
 
 
 class Vote(models.Model):
-    # user = models.ForeignKey(User)
+    user = models.ForeignKey(User, blank=True, null=True)
     idea = models.ForeignKey(Idea)
     vote_1 = models.BooleanField()
     date = models.DateTimeField(auto_now_add=True)
@@ -56,7 +57,7 @@ def vote_total(sender, instance, *args, **kwargs):
 
 
 class Comment(models.Model):
-    # user = models.ForeignKey(User)
+    user = models.ForeignKey(User, blank=True, null=True)
     idea = models.ForeignKey(Idea)
     description = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
@@ -66,4 +67,5 @@ class Comment(models.Model):
 
 
 # class User(models.Model):
+
     # profile information from API
