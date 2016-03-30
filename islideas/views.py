@@ -38,7 +38,7 @@ class ActionMixin(object):
         return super(ActionMixin, self).form_valid(form)
 
 
-class IdeaCreate(ActionMixin, CreateView):
+class IdeaCreate(CreateView):
     model = Idea
     form_class = IdeaForm
 
@@ -54,23 +54,27 @@ class IdeaCreate(ActionMixin, CreateView):
         # If tag is valid, save tag
         if tag_form.is_valid():
             new_tag = tag_form.save()
+            messages.success(request, '"{0}" was added as a new tag!'.format(new_tag.name))
             # If idea was valid, add new tag to idea
             if idea_form.is_valid():
                 new_idea = idea_form.save()
                 new_idea.tags.add(new_tag.id)
+                messages.success(request, '"{0}" was added!'.format(new_idea.title))
                 return redirect('home')
             # If idea was invalid, reload form
             else:
-
+                messages.error(request, 'Sorry, your idea could not be added.')
                 return redirect('idea_form')
         # If tag was invalid, try to process idea
         else:
             # If just the idea was valid, save idea
             if idea_form.is_valid():
                 idea_form.save()
+                messages.success(request, '"{0}" was added!'.format(new_idea.title))
                 return redirect('home')
             # If idea was invalid too, reload form
             else:
+                messages.error(request, 'Sorry, your idea could not be added.')
                 return redirect('idea_form')
 
 
@@ -99,8 +103,7 @@ class CommentDelete(ActionMixin, DeleteView):
         return context
 
 
-
-class IdeaDetail(ActionMixin, DetailView):
+class IdeaDetail(DetailView):
     model = Idea
     form_class = IdeaForm
 
@@ -118,7 +121,7 @@ class IdeaDetail(ActionMixin, DetailView):
             new_comment = comment_form.save(commit=False)
             new_comment.idea = idea
             new_comment.save()
-            # success_msg = "Added comment!"
+            messages.success(request, 'Your comment was added!')
 
         vote_form = VoteForm(request.POST)
         if vote_form.is_valid():
@@ -127,6 +130,7 @@ class IdeaDetail(ActionMixin, DetailView):
             if new_vote.vote_1:
                 new_vote.idea = idea
                 new_vote.save()
+                messages.success(request, 'Your vote was tallied!')
                 # success_msg = "Vote tallied!"
         return redirect('idea_detail', idea.slug,)
 
