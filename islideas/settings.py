@@ -69,6 +69,8 @@ MIDDLEWARE_CLASSES = (
 AUTHENTICATION_BACKENDS = (
     'googleauth.backends.GoogleAuthBackend',
 )
+
+# Copied from https://github.com/jcarbaugh/buckets/blob/bf95f032d744cbc8d71d27602799152e5f2cc8d5/buckets/settings.py
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
 

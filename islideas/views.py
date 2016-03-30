@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm, TagForm
-from islideas.ideas.models import Idea, Tag
+from islideas.ideas.models import Idea, Tag, Comment
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.utils.text import slugify
@@ -86,6 +86,18 @@ class IdeaDelete(ActionMixin, DeleteView):
     model = Idea
     success_url = 'home'
     success_msg = "Idea successfully deleted!"
+
+
+# Doesn't work :(
+class CommentDelete(ActionMixin, DeleteView):
+    model = Comment
+    success_url = 'home'
+
+    def get_context_data(self, **kwargs):
+        context = super(CommentDelete, self).get_context_data(**kwargs)
+        context['idea'] = self.idea
+        return context
+
 
 
 class IdeaDetail(ActionMixin, DetailView):
