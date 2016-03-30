@@ -53,7 +53,11 @@ class IdeaCreate(CreateView):
         idea_form = IdeaForm(request.POST)
         # If tag is valid, save tag
         if tag_form.is_valid():
-            new_tag = tag_form.save()
+            new_tag = tag_form.save(commit=False)
+            # Convert tags to lower unless acronym
+            if new_tag.name != new_tag.name.upper():
+                new_tag.name = new_tag.name.lower()
+            new_tag.save()
             messages.success(request, '"{0}" was added as a new tag!'.format(new_tag.name))
             # If idea was valid, add new tag to idea
             if idea_form.is_valid():
