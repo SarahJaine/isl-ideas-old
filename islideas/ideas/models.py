@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=30, unique=True)
 
     class Meta:
         ordering = ["name"]
@@ -15,12 +15,17 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+# @receiver(pre_save, sender=Tag)
+# def tag_idea(sender, instance, *args, **kwargs):
+#     instance.idea.tags.append(instance.name.filter(True))
+#     instance.idea.tags.save()
+
 
 class Idea(models.Model):
     user = models.ForeignKey(User, blank=True, null=True)
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
-    tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag, blank=True, null=True)
     date = models.DateTimeField(auto_now_add=True)
     votes = models.IntegerField(default=0)
     slug = models.SlugField(unique=True)
@@ -32,7 +37,7 @@ class Idea(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('idea_details', kwargs={'slug': self.slug})
+        return reverse('idea_detail', kwargs={'slug': self.slug})
 
 
 @receiver(pre_save, sender=Idea)

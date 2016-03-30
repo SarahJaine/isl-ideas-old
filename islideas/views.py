@@ -1,11 +1,13 @@
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django.views.generic.edit import CreateView, UpdateView
-from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm
-from islideas.ideas.models import Idea
+from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm, TagForm
+from islideas.ideas.models import Idea, Tag
 from django.views.decorators.http import require_http_methods
+from django.http import HttpResponse
+from django.utils.text import slugify
 
 
 class IdeaList(ListView):
@@ -38,8 +40,37 @@ class ActionMixin(object):
 class IdeaCreate(ActionMixin, CreateView):
     model = Idea
     form_class = IdeaForm
-    success_url = '/idea/{slug}'
-    success_msg = "Created new Idea!"
+
+    def get_context_data(self, **kwargs):
+        context = super(IdeaCreate, self).get_context_data(**kwargs)
+        context['tag_form'] = TagForm()
+        context['idea_form'] = IdeaForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        tag_form = TagForm(request.POST)
+        idea_form = IdeaForm(request.POST)
+        # If tag is valid, save tag
+        if tag_form.is_valid():
+            new_tag = tag_form.save()
+            # If idea was valid, add new tag to idea
+            if idea_form.is_valid():
+                new_idea = idea_form.save()
+                new_idea.tags.add(new_tag.id)
+                return redirect('home')
+            # If idea was invalid, reload form
+            else:
+
+                return redirect('idea_form')
+        # If tag was invalid, try to process idea
+        else:
+            # If just the idea was valid, save idea
+            if idea_form.is_valid():
+                idea_form.save()
+                return redirect('home')
+            # If idea was invalid too, reload form
+            else:
+                return redirect('idea_form')
 
 
 class IdeaUpdate(ActionMixin, UpdateView):

@@ -7,7 +7,8 @@ New Idea{{ block.super }}
 <h1>New Idea</h1>
   <form role="form" action="" method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ idea_form.as_p }}
+    <p>Create new Tag: {{ tag_form.name }}
     <button type="submit">Submit</button>
   </form>
 {% endblock %}
