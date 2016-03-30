@@ -4,18 +4,6 @@
 {% endblock title %}
 
 {% block content %}
-{% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-      <li id="message_{{ forloop.counter }}"
-        {% if message.tags %} class="{{ message.tags }}"
-            {% endif %}>
-          {{ message }}
-      </li>
-      {% endfor %}
-    </ul>
-{% endif %}
-
 <h1>{{ idea.title }}</h1>
   <p>{{ idea.description }}</p>
   <p>Tags: {% for tag in idea.tags.all %}
@@ -23,6 +11,7 @@
     {% endfor %}</p>
   <p>Posted at {{ idea.date }}</p>
   <a href="{% url 'idea_edit' idea.slug %}">Edit Idea</a>
+  <a href="{% url 'idea_confirm_delete' idea.slug %}">Delete Idea</a>
 
 <h2>Votes</h2>
   <p>Each Vote:

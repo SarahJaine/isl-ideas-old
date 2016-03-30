@@ -2,12 +2,13 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, View
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm, TagForm
 from islideas.ideas.models import Idea, Tag
 from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 from django.utils.text import slugify
+from django.core.urlresolvers import reverse_lazy
 
 
 class IdeaList(ListView):
@@ -79,6 +80,12 @@ class IdeaUpdate(ActionMixin, UpdateView):
     template_name_suffix = '_update_form'
     success_url = '/idea/{slug}'
     success_msg = "Idea successfully edited!"
+
+
+class IdeaDelete(ActionMixin, DeleteView):
+    model = Idea
+    success_url = 'home'
+    success_msg = "Idea successfully deleted!"
 
 
 class IdeaDetail(ActionMixin, DetailView):

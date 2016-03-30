@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf.urls import include, url
 from django.views.generic import RedirectView
-from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate
+from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate, IdeaDelete
 
 urlpatterns = [
 
@@ -13,7 +13,8 @@ urlpatterns = [
         name='idea_form'),
     url(r'^idea/(?P<slug>[-\w]+)/edit/$', IdeaUpdate.as_view(),
         name='idea_edit'),
-
+    url(r'^idea/(?P<slug>[-\w]+)/delete/$', IdeaDelete.as_view(),
+        name='idea_confirm_delete'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('googleauth.urls')),
     url(r'^.*', RedirectView.as_view(pattern_name='home')),

@@ -1,0 +1,13 @@
+{% extends 'ideas/base.html' %}
+{% block title %}
+Delete {{ idea.title }}{{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<h1>Delete "{{ idea.title }}"</h1>
+  <form role="form" action="" method="post">
+    {% csrf_token %}
+    <p> Are you sure you want to delete "{{idea.title}}"?</p>
+    <button type="submit">Confirm</button>
+  </form>
+{% endblock %}
