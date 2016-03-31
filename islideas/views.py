@@ -6,7 +6,9 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm, TagForm
 from islideas.ideas.models import Idea, Tag, Comment
 from django.views.decorators.http import require_http_methods
-
+from django.core.urlresolvers import reverse, reverse_lazy, resolve
+import logging
+from django.http import HttpResponseRedirect
 
 class IdeaList(ListView):
     model = Idea
@@ -70,7 +72,7 @@ class IdeaCreate(CreateView):
         else:
             # If just the idea was valid, save idea
             if idea_form.is_valid():
-                idea_form.save()
+                new_idea = idea_form.save()
                 messages.success(request, '"{0}" was added!'.format(new_idea.title))
                 return redirect('home')
             # If idea was invalid too, reload form
@@ -91,14 +93,6 @@ class IdeaDelete(ActionMixin, DeleteView):
     model = Idea
     success_url = 'home'
     success_msg = "Idea successfully deleted!"
-
-
-# Doesn't work :(
-class CommentDelete(DeleteView):
-    model = Comment
-
-    success_url = 'idea_detail'
-    # success_url = '/idea/{idea_slug}'
 
 
 class IdeaDetail(DetailView):
@@ -132,7 +126,14 @@ class IdeaDetail(DetailView):
                 # success_msg = "Vote tallied!"
         return redirect('idea_detail', idea.slug,)
 
-#
+
+class CommentDelete(DeleteView):
+    model = Comment
+
+    def get_success_url(self):
+        return reverse_lazy('idea_detail', kwargs={'slug': self.kwargs['idea_slug']})
+
+
 # Original def edit_idea ####
 #
 
