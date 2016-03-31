@@ -1,0 +1,13 @@
+{% extends 'ideas/base.html' %}
+{% block title %}
+Edit Comment {{ block.super }}
+{% endblock title %}
+
+{% block content %}
+<h1>Edit Comment</h1>
+  <form role="form" action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

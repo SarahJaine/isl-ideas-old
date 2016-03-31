@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.conf.urls import include, url
 from django.views.generic import RedirectView
-from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate, IdeaDelete, CommentDelete
+from .views import IdeaList, IdeaDetail, IdeaCreate, IdeaUpdate, IdeaDelete, CommentDelete, CommentUpdate
 
 urlpatterns = [
 
@@ -15,6 +15,9 @@ urlpatterns = [
         name='idea_edit'),
     url(r'^idea/(?P<slug>[-\w]+)/delete/$', IdeaDelete.as_view(),
         name='idea_confirm_delete'),
+    url(r'^idea/(?P<idea_slug>[-\w]+)/commmentedit/(?P<pk>[-\w]+)/$',
+        CommentUpdate.as_view(),
+        name='comment_edit'),
     url(r'^idea/(?P<idea_slug>[-\w]+)/commmentdelete/(?P<pk>[-\w]+)/$',
         CommentDelete.as_view(),
         name='comment_confirm_delete'),

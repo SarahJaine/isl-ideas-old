@@ -28,7 +28,7 @@ class IdeaList(ListView):
 
 class ActionMixin(object):
 
-    @require_http_methods(["POST"])
+    @require_http_methods(["POST", "GET"])
     def success_msg(self):
         return NotImplemented
 
@@ -86,12 +86,14 @@ class IdeaUpdate(ActionMixin, UpdateView):
     form_class = IdeaForm
     template_name_suffix = '_update_form'
     success_url = '/idea/{slug}'
+    # message works
     success_msg = "Idea successfully edited!"
 
 
 class IdeaDelete(ActionMixin, DeleteView):
     model = Idea
     success_url = 'home'
+    # message does not work
     success_msg = "Idea successfully deleted!"
 
 
@@ -127,12 +129,23 @@ class IdeaDetail(DetailView):
         return redirect('idea_detail', idea.slug,)
 
 
-class CommentDelete(DeleteView):
+class CommentDelete(ActionMixin, DeleteView):
     model = Comment
 
     def get_success_url(self):
         return reverse_lazy('idea_detail', kwargs={'slug': self.kwargs['idea_slug']})
+    # message does not work
+    success_msg = "Comment deleted!"
 
+class CommentUpdate(ActionMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name_suffix = '_update_form'
+
+    def get_success_url(self):
+        return reverse_lazy('idea_detail', kwargs={'slug': self.kwargs['idea_slug']})
+    # message works
+    success_msg = "Comment successfully edited!"
 
 # Original def edit_idea ####
 #
