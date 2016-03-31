@@ -23,12 +23,10 @@
 <h2>Comments</h2>
   {% for comment in idea.comment_set.all %}
     <p>{{ comment.description }}</p>
-    <p>Posted at {{comment.date }}</p>
-
+    <p>Posted at {{comment.date }}; comment.id={{comment.id}}; comment.idea.slug={{comment.idea.slug}}</p>
+      <a href="{% url 'comment_confirm_delete' comment.idea.slug comment.id %}">Delete Comment</a>
     <p>_____________</p>
   {% endfor %}
-  <a href="{% url 'comment_confirm_delete' idea.slug %}">Delete Comment</a>
-
 
 <h2>New Comment</h2>
   <form role="form" action="{% url 'idea_detail' idea.slug %}" method="post">

@@ -6,9 +6,6 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from islideas.ideas.forms import IdeaForm, CommentForm, VoteForm, TagForm
 from islideas.ideas.models import Idea, Tag, Comment
 from django.views.decorators.http import require_http_methods
-from django.http import HttpResponse
-from django.utils.text import slugify
-from django.core.urlresolvers import reverse_lazy
 
 
 class IdeaList(ListView):
@@ -23,7 +20,7 @@ class IdeaList(ListView):
         if q:
             return queryset.filter(Q(title__icontains=q) |
                                    Q(description__icontains=q) |
-                                   Q(tags__name=q))
+                                   Q(tags__name__icontains=q))
         return queryset
 
 
@@ -97,14 +94,11 @@ class IdeaDelete(ActionMixin, DeleteView):
 
 
 # Doesn't work :(
-class CommentDelete(ActionMixin, DeleteView):
+class CommentDelete(DeleteView):
     model = Comment
-    success_url = 'home'
 
-    def get_context_data(self, **kwargs):
-        context = super(CommentDelete, self).get_context_data(**kwargs)
-        context['idea'] = self.idea
-        return context
+    success_url = 'idea_detail'
+    # success_url = '/idea/{idea_slug}'
 
 
 class IdeaDetail(DetailView):
